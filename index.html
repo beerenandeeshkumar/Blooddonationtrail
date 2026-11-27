@@ -1,0 +1,491 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LifeDrop — Safe Blood Donation Network</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+
+<style>
+
+  :root {
+
+    --red:#C8102E;--red-glow:rgba(200,16,46,0.3);
+
+    --cream:#FFF5F0;--black:#0A0A0A;--gray:#1C1C1C;
+
+    --lg:#2E2E2E;--muted:#888;--green:#22c55e;--amber:#f59e0b;
+
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  body{background:var(--black);color:var(--cream);font-family:'DM Sans',sans-serif;overflow-x:hidden;}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 3rem;background:rgba(10,10,10,0.93);backdrop-filter:blur(14px);border-bottom:1px solid rgba(200,16,46,0.2);}
+
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;color:var(--red);text-shadow:0 0 20px var(--red-glow);}
+
+  .logo span{color:var(--cream);}
+
+  nav ul{display:flex;gap:2rem;list-style:none;}
+
+  nav ul a{text-decoration:none;color:#ccc;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;transition:color .2s;}
+
+  nav ul a:hover{color:var(--red);}
+
+  .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:6rem 3rem 3rem;position:relative;overflow:hidden;max-width:1200px;margin:0 auto;}
+
+  .hero::before{content:'';position:absolute;top:-200px;right:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(200,16,46,0.14) 0%,transparent 70%);pointer-events:none;}
+
+  .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,7vw,7rem);line-height:.9;letter-spacing:2px;}
+
+  .hero h1 .accent{color:var(--red);display:block;}
+
+  .hero p{margin-top:1.5rem;font-size:1rem;line-height:1.75;color:#bbb;max-width:420px;font-weight:300;}
+
+  .cta{display:flex;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;}
+
+  .badges{display:flex;gap:.6rem;margin-top:1.5rem;flex-wrap:wrap;}
+
+  .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .85rem;border-radius:50px;font-size:.7rem;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+
+  .bg{background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.2);}
+
+  .ba{background:rgba(245,158,11,.1);color:#fbbf24;border:1px solid rgba(245,158,11,.2);}
+
+  .bb{background:rgba(96,165,250,.1);color:#93c5fd;border:1px solid rgba(96,165,250,.2);}
+
+  .br{background:rgba(200,16,46,.1);color:#ff8a9a;border:1px solid rgba(200,16,46,.2);}
+
+  .hero-visual{display:flex;justify-content:center;align-items:center;}
+
+  .drop-wrap{position:relative;width:240px;height:300px;}
+
+  .drop-svg{width:100%;filter:drop-shadow(0 0 40px rgba(200,16,46,0.6));animation:float 4s ease-in-out infinite;}
+
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+
+  .pr{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:280px;height:280px;border-radius:50%;border:1px solid rgba(200,16,46,.22);animation:pulse 2.5s ease-out infinite;}
+
+  .pr:nth-child(2){animation-delay:.8s}.pr:nth-child(3){animation-delay:1.6s}
+
+  @keyframes pulse{0%{transform:translate(-50%,-50%) scale(.5);opacity:1}100%{transform:translate(-50%,-50%) scale(2.2);opacity:0}}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(200,16,46,.1);border-top:1px solid rgba(200,16,46,.1);border-bottom:1px solid rgba(200,16,46,.1);}
+
+  .stat{background:var(--black);padding:2.5rem;text-align:center;}
+
+  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;color:var(--red);text-shadow:0 0 20px var(--red-glow);}
+
+  .stat-lbl{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:2px;margin-top:.4rem;}
+
+  .btn-p{padding:.85rem 2.2rem;background:var(--red);color:#fff;border:none;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all .25s;box-shadow:0 0 30px var(--red-glow);}
+
+  .btn-p:hover{background:#a50d25;transform:translateY(-2px);}
+
+  .btn-p:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+  .btn-o{padding:.85rem 2.2rem;background:transparent;color:var(--cream);border:1px solid rgba(255,245,240,.3);border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all .25s;}
+
+  .btn-o:hover{border-color:var(--red);color:var(--red);}
+
+  .btn-sm{padding:.45rem 1.1rem!important;font-size:.78rem!important;}
+
+  .btn-gh{background:none;border:1px solid var(--lg);color:#aaa;padding:.45rem 1rem;border-radius:4px;cursor:pointer;font-size:.78rem;font-family:'DM Sans',sans-serif;transition:all .2s;}
+
+  .btn-gh:hover{border-color:var(--red);color:var(--red);}
+
+  section{padding:5rem 3rem;max-width:1200px;margin:0 auto;}
+
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:3px;margin-bottom:.4rem;}
+
+  .sec-sub{color:var(--muted);font-size:.95rem;margin-bottom:3rem;}
+
+  .tabs{display:flex;border-bottom:2px solid var(--lg);margin-bottom:2.5rem;flex-wrap:wrap;}
+
+  .tab{padding:.9rem 1.8rem;cursor:pointer;font-size:.8rem;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif;white-space:nowrap;position:relative;}
+
+  .tab.active{color:var(--red);border-bottom-color:var(--red);}
+
+  .tab-content{display:none;}.tab-content.active{display:block;}
+
+  .notif-dot{position:absolute;top:8px;right:10px;width:8px;height:8px;background:var(--red);border-radius:50%;animation:blink 1.5s ease-in-out infinite;}
+
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+  .form{max-width:580px;}
+
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem;}
+
+  .fg{display:flex;flex-direction:column;gap:.4rem;}
+
+  .fg label{font-size:.75rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:600;}
+
+  .fg input,.fg select{background:var(--gray);border:1px solid var(--lg);border-radius:4px;padding:.75rem 1rem;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s;}
+
+  .fg input:focus,.fg select:focus{border-color:var(--red);}
+
+  .fg select option{background:var(--gray);}
+
+  .help{font-size:.71rem;color:var(--muted);margin-top:.3rem;}
+
+  .s-ok{color:var(--green);font-size:.78rem;} .s-err{color:#f87171;font-size:.78rem;}
+
+  .otp-row{display:flex;gap:.6rem;align-items:flex-end;}
+
+  .otp-row input{flex:1;}
+
+  .otp-inp{width:140px!important;flex:none!important;letter-spacing:8px;font-size:1.2rem!important;text-align:center;}
+
+  .consent-box{background:rgba(200,16,46,.06);border:1px solid rgba(200,16,46,.2);border-radius:6px;padding:1.2rem 1.4rem;margin:1.2rem 0;font-size:.84rem;color:#ccc;line-height:1.6;}
+
+  .consent-box strong{color:var(--cream);}
+
+  .ckrow{display:flex;gap:.8rem;align-items:flex-start;margin-top:.9rem;}
+
+  .ckrow input[type=checkbox]{width:16px;height:16px;margin-top:3px;accent-color:var(--red);cursor:pointer;flex-shrink:0;}
+
+  .ckrow label{font-size:.83rem;cursor:pointer;color:var(--cream);}
+
+  .expiry-bar{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:4px;padding:.6rem 1rem;font-size:.78rem;color:#fbbf24;margin-top:.5rem;}
+
+  .search-wrap{display:flex;max-width:600px;margin-bottom:1.5rem;border:1px solid var(--lg);border-radius:6px;overflow:hidden;transition:border-color .2s;}
+
+  .search-wrap:focus-within{border-color:var(--red);box-shadow:0 0 0 2px var(--red-glow);}
+
+  .search-wrap input{flex:1;background:var(--gray);border:none;padding:.9rem 1.2rem;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;}
+
+  .search-wrap button{padding:.9rem 1.8rem;background:var(--red);border:none;color:#fff;cursor:pointer;font-weight:600;font-family:'DM Sans',sans-serif;font-size:.85rem;text-transform:uppercase;letter-spacing:1px;transition:background .2s;}
+
+  .search-wrap button:hover{background:#a50d25;}
+
+  .search-note{font-size:.78rem;color:var(--muted);margin-bottom:1.5rem;}
+
+  .filters{display:flex;gap:.7rem;margin-bottom:2rem;flex-wrap:wrap;align-items:center;}
+
+  .chip{padding:.32rem .9rem;border:1px solid var(--lg);border-radius:50px;background:none;color:#aaa;cursor:pointer;font-size:.76rem;font-family:'DM Sans',sans-serif;transition:all .2s;}
+
+  .chip.active,.chip:hover{border-color:var(--red);color:var(--red);background:rgba(200,16,46,.08);}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.2rem;}
+
+  .card{background:var(--gray);border:1px solid var(--lg);border-radius:8px;padding:1.4rem;transition:all .3s;animation:up .3s ease forwards;}
+
+  .card:hover{border-color:rgba(200,16,46,.4);transform:translateY(-2px);box-shadow:0 8px 30px rgba(200,16,46,.1);}
+
+  @keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  .avatar{width:44px;height:44px;border-radius:50%;background:rgba(200,16,46,.12);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--red);border:2px solid rgba(200,16,46,.25);flex-shrink:0;}
+
+  .tag{font-size:.7rem;padding:.2rem .65rem;border-radius:3px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+
+  .t-blood{background:rgba(200,16,46,.18);color:#ff8a9a;}
+
+  .t-ok{background:rgba(34,197,94,.12);color:#4ade80;}
+
+  .t-act{background:rgba(245,158,11,.12);color:#fbbf24;}
+
+  .masked{font-size:.95rem;font-family:'Bebas Neue',sans-serif;letter-spacing:3px;color:#777;}
+
+  .masked strong{color:var(--cream);}
+
+  .ct-sep{border-top:1px solid var(--lg);padding-top:1rem;margin-top:.8rem;}
+
+  .no-res{text-align:center;padding:4rem;color:var(--muted);}
+
+  .no-res .icon{font-size:2.5rem;margin-bottom:1rem;}
+
+  /* ── MANAGE PANEL ── */
+
+  .manage-wrap{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:900px;}
+
+  .manage-sidebar{display:flex;flex-direction:column;gap:.5rem;}
+
+  .mgmt-btn{display:flex;align-items:center;gap:.8rem;padding:.75rem 1rem;border-radius:6px;background:none;border:1px solid var(--lg);color:#aaa;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;text-align:left;transition:all .2s;position:relative;}
+
+  .mgmt-btn:hover{border-color:rgba(200,16,46,.4);color:var(--cream);}
+
+  .mgmt-btn.active{background:rgba(200,16,46,.1);border-color:rgba(200,16,46,.4);color:var(--cream);}
+
+  .mgmt-btn .micon{font-size:1.1rem;}
+
+  .mgmt-panel{display:none;}.mgmt-panel.active{display:block;}
+
+  .inbox-badge{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:var(--red);color:#fff;font-size:.65rem;font-weight:700;padding:.1rem .45rem;border-radius:50px;min-width:20px;text-align:center;}
+
+  /* REQUEST CARDS */
+
+  .req-card{background:var(--gray);border:1px solid var(--lg);border-radius:8px;padding:1.2rem 1.4rem;margin-bottom:1rem;transition:border-color .2s;}
+
+  .req-card.unread{border-left:3px solid var(--red);}
+
+  .req-card:hover{border-color:rgba(200,16,46,.35);}
+
+  .req-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;gap:1rem;}
+
+  .req-name{font-weight:600;font-size:.95rem;}
+
+  .req-time{font-size:.72rem;color:var(--muted);white-space:nowrap;}
+
+  .req-reason{font-size:.88rem;color:#ccc;line-height:1.6;margin-bottom:.8rem;}
+
+  .req-phone{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--green);}
+
+  .req-actions{display:flex;gap:.7rem;margin-top:1rem;flex-wrap:wrap;}
+
+  .req-meta{display:flex;gap:.6rem;margin-bottom:.6rem;flex-wrap:wrap;}
+
+  .new-pill{background:rgba(200,16,46,.2);color:#ff8a9a;font-size:.68rem;font-weight:700;padding:.15rem .55rem;border-radius:3px;text-transform:uppercase;letter-spacing:.5px;}
+
+  /* PROFILE PANEL */
+
+  .profile-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+
+  .data-item{background:rgba(255,255,255,.03);border:1px solid var(--lg);border-radius:6px;padding:.9rem 1rem;}
+
+  .data-label{font-size:.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:600;margin-bottom:.3rem;}
+
+  .data-value{font-size:.95rem;color:var(--cream);}
+
+  /* PRIVACY */
+
+  .priv-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:900px;}
+
+  .priv-card{background:var(--gray);border:1px solid var(--lg);border-radius:8px;padding:2rem;}
+
+  .priv-card h3{font-size:.9rem;margin-bottom:1rem;color:var(--cream);letter-spacing:1px;text-transform:uppercase;}
+
+  .pi{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start;}
+
+  .pi p{font-size:.84rem;color:#bbb;line-height:1.6;}
+
+  .pi strong{color:var(--cream);}
+
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+
+  .why-card{background:var(--gray);border-radius:8px;padding:2rem;border:1px solid var(--lg);}
+
+  .why-card h3{font-size:1rem;margin-bottom:.7rem;font-weight:600;}
+
+  .why-card p{color:var(--muted);font-size:.88rem;line-height:1.7;}
+
+  .toast{position:fixed;bottom:2rem;right:2rem;z-index:999;background:var(--gray);border:1px solid var(--red);border-radius:6px;padding:.9rem 1.4rem;display:flex;align-items:center;gap:.7rem;font-size:.88rem;color:var(--cream);transform:translateY(100px);opacity:0;transition:all .4s cubic-bezier(.175,.885,.32,1.275);box-shadow:0 10px 30px rgba(0,0,0,.5);max-width:350px;}
+
+  .toast.show{transform:translateY(0);opacity:1;}
+
+  .tdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s;}
+
+  .overlay.open{opacity:1;pointer-events:all;}
+
+  .modal{background:var(--gray);border:1px solid rgba(200,16,46,.3);border-radius:10px;padding:2.5rem;max-width:460px;width:100%;position:relative;}
+
+  .modal h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;margin-bottom:.5rem;}
+
+  .modal p{color:#aaa;font-size:.88rem;line-height:1.6;margin-bottom:1.5rem;}
+
+  .modal-x{position:absolute;top:1rem;right:1rem;background:none;border:none;color:#888;font-size:1.2rem;cursor:pointer;}
+
+  .modal-x:hover{color:var(--cream);}
+
+  footer{background:var(--gray);border-top:1px solid rgba(200,16,46,.15);text-align:center;padding:2rem;color:var(--muted);font-size:.82rem;}
+
+  footer span{color:var(--red);}
+
+  .flinks{display:flex;gap:2rem;justify-content:center;margin-bottom:1rem;flex-wrap:wrap;}
+
+  .flinks a{color:var(--muted);text-decoration:none;font-size:.78rem;transition:color .2s;}
+
+  .flinks a:hover{color:var(--red);}
+
+  .divider{border:none;border-top:1px solid var(--lg);margin:1.5rem 0;}
+
+  @media(max-width:768px){
+
+    nav{padding:1rem 1.5rem;}nav ul{display:none;}
+
+    .hero{grid-template-columns:1fr;padding:5rem 1.5rem 3rem;}
+
+    .hero-visual{margin-top:2rem;}
+
+    .stats{grid-template-columns:1fr;}
+
+    section{padding:3rem 1.5rem;}
+
+    .why-grid,.priv-grid{grid-template-columns:1fr;}
+
+    .frow{grid-template-columns:1fr;}
+
+    .manage-wrap{grid-template-columns:1fr;}
+
+    .profile-row{grid-template-columns:1fr;}
+
+  }
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+  <div class="logo">LIFE<span>DROP</span></div>
+
+  <ul>
+
+    <li><a href="#home">Home</a></li>
+
+    <li><a href="#portal">Register / Find</a></li>
+
+    <li><a href="#privacy">Privacy</a></li>
+
+    <li><a href="#why">Why Donate</a></li>
+
+  </ul>
+
+</nav>
+
+<!-- HERO -->
+
+<div id="home" style="max-width:1200px;margin:0 auto;">
+
+<div class="hero">
+
+  <div>
+
+    <h1>YOUR BLOOD <span class="accent">SAVES LIVES</span></h1>
+
+    <p>A safe, consent-first donor network. Your privacy is protected at every step — compliant with India's Digital Personal Data Protection Act 2023.</p>
+
+    <div class="cta">
+
+      <button class="btn-p" onclick="switchTab('register')">Register as Donor</button>
+
+      <button class="btn-o" onclick="switchTab('find')">Find Blood Now</button>
+
+    </div>
+
+    <div class="badges">
+
+      <span class="badge bg">✓ Number Masking</span>
+
+      <span class="badge ba">✓ OTP Verified</span>
+
+      <span class="badge bb">✓ DPDPA Compliant</span>
+
+      <span class="badge br">✓ Donor Inbox</span>
+
+    </div>
+
+  </div>
+
+  <div class="hero-visual">
+
+    <div class="drop-wrap">
+
+      <div class="pr"></div><div class="pr"></div><div class="pr"></div>
+
+      <svg class="drop-svg" viewBox="0 0 200 260" fill="none">
+
+        <defs><radialGradient id="dg" cx="40%" cy="35%" r="65%"><stop offset="0%" stop-color="#ff4d6d"/><stop offset="100%" stop-color="#8B0000"/></radialGradient></defs>
+
+        <path d="M100 10 C100 10 20 100 20 155 C20 205 55 240 100 240 C145 240 180 205 180 155 C180 100 100 10 100 10Z" fill="url(#dg)"/>
+
+        <path d="M65 140 C65 120 80 108 100 108 C110 108 118 112 124 118" stroke="rgba(255,255,255,0.3)" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+        <circle cx="75" cy="155" r="8" fill="rgba(255,255,255,0.12)"/>
+
+        <text x="100" y="206" text-anchor="middle" font-size="26" fill="rgba(255,255,255,0.22)">🛡️</text>
+
+      </svg>
+
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+<!-- STATS -->
+
+<div class="stats">
+
+  <div class="stat"><div class="stat-num" id="donorCount">0</div><div class="stat-lbl">Verified Donors</div></div>
+
+  <div class="stat"><div class="stat-num">8</div><div class="stat-lbl">Blood Types</div></div>
+
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-lbl">Consent-Based</div></div>
+
+</div>
+
+<!-- PORTAL -->
+
+<section id="portal">
+
+  <div class="sec-title">DONOR <span style="color:var(--red)">PORTAL</span></div>
+
+  <div class="sec-sub">OTP-verified · Number masked · Donor inbox to view & respond to requests · DPDPA compliant</div>
+
+  <div class="tabs">
+
+    <button class="tab active" id="tab-register" onclick="switchTab('register')">Register Donor</button>
+
+    <button class="tab" id="tab-find" onclick="switchTab('find')">Find Blood</button>
+
+    <button class="tab" id="tab-manage" onclick="switchTab('manage')">My Account</button>
+
+  </div>
+
+  <!-- ══ REGISTER ══ -->
+
+  <div class="tab-content active" id="content-register">
+
+    <div class="form">
+
+      <div id="step-1">
+
+        <div style="font-size:.74rem;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:1.5rem;">Step 1 of 3 — Basic Information</div>
+
+        <div class="frow">
+
+          <div class="fg"><label>Full Name</label><input type="text" id="reg-name" placeholder="e.g. Ravi Kumar"/><span class="help">Only initials shown publicly (R.K.)</span></div>
+
+          <div class="fg"><label>Blood Group</label><select id="reg-blood"><option value="">Select</option><option>A+</option><option>A−</option><option>B+</option><option>B−</option><option>AB+</option><option>AB−</option><option>O+</option><option>O−</option></select></div>
+
+        </div>
+
+        <div class="frow">
+
+          <div class="fg"><label>Area / City</label><input type="text" id="reg-area" placeholder="e.g. Nellore"/><span class="help">City-level only. No street address.</span></div>
+
+          <div class="fg"><label>Age Range</label><select id="reg-age"><option value="">Select</option><option>18–25</option><option>26–35</option><option>36–45</option><option>46–55</option><option>56–65</option></select></div>
+
+        </div>
+
+        <button class="btn-p" onclick="goStep2()">Continue to Verify →</button>
+
+      </div>
+
+      <div id="step-2" style="display:none;">
+
+        <div style="font-size:.74rem;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:1.5rem;">Step 2 of 3 — Phone Verification</div>
+
+        <div class="fg" style="max-width:380px;margin-bottom:1.2rem;">
+
+          <label>Mobile Number</label>
+
+          <div class="otp-row">
+
+            <input type="tel" id="reg-phone" placeholder="10-digit number" maxlength="10"/>
+
+            <button class="btn-p btn-sm" onclick="sendOTP()" id="send-btn">Send OTP<
